@@ -31,89 +31,29 @@ pub fn build(b: *std.Build) void {
         .files = &spvtools_sources,
         .flags = &flags,
     });
-    spvtools.installHeadersDirectory(b.path("include"), ".", .{ .include_extensions = &.{ "inc", "h", "hpp" } });
-    spvtools.installHeadersDirectory(spirv_tools_dep.path("include/spirv-tools"), "spirv-tools", .{ .include_extensions = &.{ "inc", "h", "hpp" } });
-    b.installArtifact(spvtools);
-
-    const spvtools_val = b.addLibrary(.{
-        .name = "spvtools_val",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-        }),
-        .linkage = linkage,
-    });
-    spvtools_val.linkLibCpp();
-    spvtools_val.addIncludePath(b.path("include"));
-    spvtools_val.addIncludePath(spirv_tools_dep.path("include"));
-    spvtools_val.addIncludePath(spirv_tools_dep.path("."));
-    spvtools_val.addIncludePath(spirv_headers_dep.path("include"));
-    spvtools_val.addCSourceFiles(.{
+    spvtools.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_val_sources,
         .flags = &flags,
     });
-    b.installArtifact(spvtools_val);
-
-    const spvtools_opt = b.addLibrary(.{
-        .name = "spvtools_opt",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-        }),
-        .linkage = linkage,
-    });
-    spvtools_opt.linkLibCpp();
-    spvtools_opt.addIncludePath(b.path("include"));
-    spvtools_opt.addIncludePath(spirv_tools_dep.path("include"));
-    spvtools_opt.addIncludePath(spirv_tools_dep.path("."));
-    spvtools_opt.addIncludePath(spirv_headers_dep.path("include"));
-    spvtools_opt.addCSourceFiles(.{
-        .root = spirv_tools_dep.path("."),
-        .files = &spvtools_opt_sources,
-        .flags = &flags,
-    });
-    b.installArtifact(spvtools_opt);
-
-    const spvtools_link = b.addLibrary(.{
-        .name = "spvtools_link",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-        }),
-        .linkage = linkage,
-    });
-    spvtools_link.linkLibCpp();
-    spvtools_link.addIncludePath(b.path("include"));
-    spvtools_link.addIncludePath(spirv_tools_dep.path("include"));
-    spvtools_link.addIncludePath(spirv_tools_dep.path("."));
-    spvtools_link.addIncludePath(spirv_headers_dep.path("include"));
-    spvtools_link.addCSourceFiles(.{
+    spvtools.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_link_sources,
         .flags = &flags,
     });
-    b.installArtifact(spvtools_link);
-
-    const spvtools_reduce = b.addLibrary(.{
-        .name = "spvtools_reduce",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-        }),
-        .linkage = linkage,
+    spvtools.addCSourceFiles(.{
+        .root = spirv_tools_dep.path("."),
+        .files = &spvtools_opt_sources,
+        .flags = &flags,
     });
-    spvtools_reduce.linkLibCpp();
-    spvtools_reduce.addIncludePath(b.path("include"));
-    spvtools_reduce.addIncludePath(spirv_tools_dep.path("include"));
-    spvtools_reduce.addIncludePath(spirv_tools_dep.path("."));
-    spvtools_reduce.addIncludePath(spirv_headers_dep.path("include"));
-    spvtools_reduce.addCSourceFiles(.{
+    spvtools.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_reduce_sources,
         .flags = &flags,
     });
-    b.installArtifact(spvtools_reduce);
+    spvtools.installHeadersDirectory(b.path("include"), ".", .{ .include_extensions = &.{ "inc", "h", "hpp" } });
+    spvtools.installHeadersDirectory(spirv_tools_dep.path("include/spirv-tools"), "spirv-tools", .{ .include_extensions = &.{ "inc", "h", "hpp" } });
+    b.installArtifact(spvtools);
 
     const grammar_unified_dir = spirv_headers_dep.path("include/spirv/unified1");
     // const grammar_1_dir = spirv_headers_dep.path("include/spirv/1.0");
