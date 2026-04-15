@@ -1,5 +1,5 @@
 # SPIRV-Tools
-This is SPIRV-Tools packaged for the Zig build system.
+This is [SPIRV-Tools](https://github.com/khronosGroup/SPIRV-Tools) packaged for the zig build system.
 
 # generating code
 SPIRV-Tools generates some code with python. These files are pregenerated and live in the `include` directory, so depending on this package does not require a python installation.  

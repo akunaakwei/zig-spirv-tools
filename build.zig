@@ -13,43 +13,45 @@ pub fn build(b: *std.Build) void {
 
     const flags = .{""};
 
-    const spvtools = b.addLibrary(.{
-        .name = "spvtools",
-        .root_module = b.createModule(.{
-            .target = target,
-            .optimize = optimize,
-            .link_libcpp = true,
-        }),
-        .linkage = linkage,
+    const spvtools_mod = b.createModule(.{
+        .target = target,
+        .optimize = optimize,
+        .link_libcpp = true,
     });
-    spvtools.addIncludePath(b.path("include"));
-    spvtools.addIncludePath(spirv_tools_dep.path("include"));
-    spvtools.addIncludePath(spirv_tools_dep.path("."));
-    spvtools.addIncludePath(spirv_headers_dep.path("include"));
-    spvtools.addCSourceFiles(.{
+    spvtools_mod.addIncludePath(b.path("include"));
+    spvtools_mod.addIncludePath(spirv_tools_dep.path("include"));
+    spvtools_mod.addIncludePath(spirv_tools_dep.path("."));
+    spvtools_mod.addIncludePath(spirv_headers_dep.path("include"));
+    spvtools_mod.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_sources,
         .flags = &flags,
     });
-    spvtools.addCSourceFiles(.{
+    spvtools_mod.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_val_sources,
         .flags = &flags,
     });
-    spvtools.addCSourceFiles(.{
+    spvtools_mod.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_link_sources,
         .flags = &flags,
     });
-    spvtools.addCSourceFiles(.{
+    spvtools_mod.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_opt_sources,
         .flags = &flags,
     });
-    spvtools.addCSourceFiles(.{
+    spvtools_mod.addCSourceFiles(.{
         .root = spirv_tools_dep.path("."),
         .files = &spvtools_reduce_sources,
         .flags = &flags,
+    });
+
+    const spvtools = b.addLibrary(.{
+        .name = "spvtools",
+        .root_module = spvtools_mod,
+        .linkage = linkage,
     });
     spvtools.installHeadersDirectory(b.path("include"), ".", .{ .include_extensions = &.{ "inc", "h", "hpp" } });
     spvtools.installHeadersDirectory(spirv_tools_dep.path("include/spirv-tools"), "spirv-tools", .{ .include_extensions = &.{ "inc", "h", "hpp" } });

@@ -1,8 +1,8 @@
 .{
     .name = .spirv_tools,
-    .version = "0.0.0",
+    .version = "20.26.1",
     .fingerprint = 0xba03d7cde8027494, // Changing this has security and trust implications.
-    .minimum_zig_version = "0.14.1",
+    .minimum_zig_version = "0.16.0",
     .dependencies = .{
         .spirv_tools = .{
             .url = "https://github.com/KhronosGroup/SPIRV-Tools/archive/refs/tags/v2026.1.tar.gz",
