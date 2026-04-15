@@ -85,7 +85,7 @@ pub fn build(b: *std.Build) void {
     const gen_build_version_cmd = b.addSystemCommand(&.{"python3"});
     gen_build_version_cmd.addFileArg(spirv_tools_dep.path("utils/update_build_version.py"));
     gen_build_version_cmd.addFileArg(spirv_tools_dep.path("CHANGES"));
-    gen_build_version_cmd.addFileArg(b.path("include/generators.inc"));
+    gen_build_version_cmd.addFileArg(b.path("include/build-version.inc"));
 
     const gen_language_header_debuginfo_step = spvtools_language_header(b, "DebugInfo", spirv_headers_dep.path("include/spirv/unified1/extinst.debuginfo.grammar.json"));
     const gen_language_header_cldebuginfo100_step = spvtools_language_header(b, "OpenCLDebugInfo100", spirv_headers_dep.path("include/spirv/unified1/extinst.opencl.debuginfo.100.grammar.json"));
@@ -94,6 +94,7 @@ pub fn build(b: *std.Build) void {
     const gen_step = b.step("gen", "include/build-version.inc");
     gen_step.dependOn(&gen_core_tables_cmd.step);
     gen_step.dependOn(&gen_generators_inc_cmd.step);
+    gen_step.dependOn(&gen_build_version_cmd.step);
     gen_step.dependOn(gen_language_header_debuginfo_step);
     gen_step.dependOn(gen_language_header_cldebuginfo100_step);
     gen_step.dependOn(gen_language_header_vkdebuginfo100_step);
@@ -125,7 +126,7 @@ const spvtools_sources = .{
     "source/parsed_operand.cpp",
     "source/pch_source.cpp",
     "source/print.cpp",
-    // "source/software_version.cpp",
+    "source/software_version.cpp",
     "source/spirv_endian.cpp",
     "source/spirv_fuzzer_options.cpp",
     "source/spirv_optimizer_options.cpp",
